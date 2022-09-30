@@ -9,6 +9,7 @@
 
 ### Iniciar projeto
 --> npm i
+
 --> npm run dev
 
 ### Técnologias utilizadas
