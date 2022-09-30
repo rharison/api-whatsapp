@@ -1,3 +1,9 @@
-import start from './api/index.js'
+import { startClient } from './api/index.js'
+import { startServerHttp } from './http/index.js'
 
-start()
+(async () => {
+  startServerHttp()
+  console.log('Starting client...')
+  await startClient()
+  console.log('Client started')
+})()

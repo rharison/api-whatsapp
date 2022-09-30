@@ -1,13 +1,14 @@
 import venon from 'venom-bot'
 
 let client;
-let base64Qrimg;
-let asciiQR;
-let attempts;
-let urlCode;
+let base64Qr;
+let asciiQr;
+let attemptsQr;
+let urlCodeQr;
 let statusSession;
+let isConnected;
 
-async function sendMessage(to, body) {
+export async function sendMessage(to, body) {
   try {
     await client.sendText(to, body)
   } catch(err) {
@@ -16,34 +17,43 @@ async function sendMessage(to, body) {
 }
 
 function controllerQrCode(base64Qrimg, asciiQR, attempts, urlCode) {
-  base64Qrimg = base64Qrimg;
-  asciiQR = asciiQR;
-  attempts = attempts;
-  urlCode = urlCode;
+  base64Qr = base64Qrimg;
+  asciiQr = asciiQR;
+  attemptsQr = attempts;
+  urlCodeQr = urlCode;
 }
 
-function getInfoQrCode() {
+export function getInfoQrCode() {
   return {
-    base64Qrimg,
-    attempts,
+    base64Qr,
+    asciiQr,
+    attemptsQr,
+    urlCodeQr
   }
 }
 
-function isConnected() {
-  return statusSession === 'isLogged'
+export function getIsConnected() {
+  return isConnected
 }
 
 function controllerStatus(statusSession) {
-  console.log('Status Session: ', statusSession);
+  isConnected = ['isLogged', 'qrReadSuccess', 'chatsAvailable'].includes(statusSession)
 }
 
-async function start() {
+export async function startClient() {
   try {
-    client = await venon.create('api-whatsapp-dev', controllerQrCode, controllerStatus,{headless: false})
-    sendMessage('5564992747833@c.us', 'Animal')
+    if(!client) {
+      client = await venon.create('api-whatsapp-dev', controllerQrCode, controllerStatus)
+      sendMessage('5511999999999', 'Hello world!')
+    }
   } catch(err) {
     console.log(err)
   }
 }
 
-export default start
+export default {
+  startClient,
+  sendMessage,
+  getIsConnected,
+  getInfoQrCode
+}
